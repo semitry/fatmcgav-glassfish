@@ -10,6 +10,18 @@ Puppet::Type.newtype(:jdbcconnectionpool) do
     isnamevar
   end
 
+  newparam(:poolname) do
+    desc "The JDBC connection pool name."
+
+    munge do |value|
+      if value.nil?
+        resource[:name]
+      else
+        value
+      end
+    end
+  end
+
   newparam(:dsclassname) do
     desc "The data source class name. Ex. com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource"
   end
@@ -48,7 +60,7 @@ Puppet::Type.newtype(:jdbcconnectionpool) do
 
     validate do |value|
       unless value =~ /^[\w-]+$/
-         raise ArgumentError, "%s is not a valid asadmin user name." % value
+        raise ArgumentError, "%s is not a valid asadmin user name." % value
       end
     end
   end
@@ -71,7 +83,7 @@ Puppet::Type.newtype(:jdbcconnectionpool) do
         self.fail "Only root can execute commands as other users"
       end
       unless value =~ /^[\w-]+$/
-         raise ArgumentError, "%s is not a valid user name." % value
+        raise ArgumentError, "%s is not a valid user name." % value
       end
     end
   end

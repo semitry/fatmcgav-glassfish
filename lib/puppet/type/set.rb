@@ -11,13 +11,41 @@ Puppet::Type.newtype(:set) do
 
     validate do |value|
       unless value =~ /^[^\W]?[\w\-\.=]+$/
-         raise ArgumentError, "%s is not a valid set attribute-name." % value
+        raise ArgumentError, "%s is not a valid set attribute-name." % value
       end
     end
   end
 
+  newparam(:attribute) do
+    desc "The attribute name. Same as the title if value not set."
+    validate do |value|
+      unless value =~ /^[^\W]?[\w\-\.=]+$/
+        raise ArgumentError, "%s is not a valid set attribute-name." % value
+      end
+    end
+
+    munge do |value|
+      if value.nil?
+        resource[:name]
+      else
+        value
+      end
+    end
+
+  end
+
   newparam(:value) do
     desc "The attribute value."
+
+    munge do |value|
+      if value == true
+        "true"
+      elsif value == false
+        "false"
+      else
+        value 
+      end
+    end
   end
 
   newparam(:portbase) do
@@ -46,7 +74,7 @@ Puppet::Type.newtype(:set) do
 
     validate do |value|
       unless value =~ /^[\w-]+$/
-         raise ArgumentError, "%s is not a valid asadmin user name." % value
+        raise ArgumentError, "%s is not a valid asadmin user name." % value
       end
     end
   end
@@ -69,7 +97,7 @@ Puppet::Type.newtype(:set) do
         self.fail "Only root can execute commands as other users"
       end
       unless value =~ /^[\w-]+$/
-         raise ArgumentError, "%s is not a valid user name." % value
+        raise ArgumentError, "%s is not a valid user name." % value
       end
     end
   end

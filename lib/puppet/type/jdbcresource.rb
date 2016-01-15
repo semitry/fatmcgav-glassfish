@@ -9,6 +9,17 @@ Puppet::Type.newtype(:jdbcresource) do
     isnamevar
   end
 
+  newparam(:resourcename) do
+    desc "The JDBC resource name."
+    munge do |value|
+      if value.nil?
+        resource[:name]
+      else
+        value
+      end
+    end
+  end
+
   newparam(:connectionpool) do
     desc "The JDBC connection pool name"
   end
@@ -46,7 +57,7 @@ Puppet::Type.newtype(:jdbcresource) do
 
     validate do |value|
       unless value =~ /^[\w-]+$/
-         raise ArgumentError, "%s is not a valid asadmin user name." % value
+        raise ArgumentError, "%s is not a valid asadmin user name." % value
       end
     end
   end
@@ -69,7 +80,7 @@ Puppet::Type.newtype(:jdbcresource) do
         self.fail "Only root can execute commands as other users"
       end
       unless value =~ /^[\w-]+$/
-         raise ArgumentError, "%s is not a valid user name." % value
+        raise ArgumentError, "%s is not a valid user name." % value
       end
     end
   end

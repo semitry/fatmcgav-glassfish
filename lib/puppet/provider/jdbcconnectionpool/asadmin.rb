@@ -14,19 +14,19 @@ Puppet::Type.type(:jdbcconnectionpool).provide(:asadmin, :parent =>
       args << "--property"
       args << "\'#{prepareProperties @resource[:properties]}\'"
     end
-    args << @resource[:name]
+    args << @resource[:poolname]
     asadmin_exec(args)
   end
 
   def destroy
     args = Array.new
-    args << "delete-jdbc-connection-pool" << @resource[:name]
+    args << "delete-jdbc-connection-pool" << @resource[:poolname]
     asadmin_exec(args)
   end
 
   def exists?
     asadmin_exec(["list-jdbc-connection-pools"]).each do |line|
-      return true if @resource[:name] == line.strip
+      return true if @resource[:poolname] == line.strip
     end
     return false
   end

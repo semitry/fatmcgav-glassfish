@@ -9,7 +9,7 @@ Puppet::Provider::Asadmin) do
     args << "create-jdbc-resource"
     args << "--connectionpoolid" << @resource[:connectionpool]
     args << "--target" << @resource[:target] if @resource[:target]
-    args << @resource[:name]
+    args << @resource[:resourcename]
 
     asadmin_exec(args)
   end
@@ -18,7 +18,7 @@ Puppet::Provider::Asadmin) do
     args = Array.new
     args << "delete-jdbc-resource"
     args << "--target" << @resource[:target]
-    args << @resource[:name]
+    args << @resource[:resourcename]
 
     asadmin_exec(args)
   end
@@ -29,7 +29,7 @@ Puppet::Provider::Asadmin) do
     args << @resource[:target] if @resource[:target]
 
     asadmin_exec(args).each do |line|
-      return true if @resource[:name] == line.strip
+      return true if @resource[:resourcename] == line.strip
     end
     return false
   end

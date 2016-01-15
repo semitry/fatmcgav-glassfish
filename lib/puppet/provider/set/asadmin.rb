@@ -4,11 +4,10 @@ require 'puppet/provider/asadmin'
 Puppet::Type.type(:set).provide(:asadmin, :parent =>
                                       Puppet::Provider::Asadmin) do
   desc "Glassfish domain attribute support."
-
   def create
     args = Array.new
     args << 'set'
-    args << "#{@resource[:name]}=#{@resource[:value]}"
+    args << "#{@resource[:attribute]}=#{@resource[:value]}"
     asadmin_exec(args)
   end
 
@@ -18,8 +17,8 @@ Puppet::Type.type(:set).provide(:asadmin, :parent =>
 
   def exists?
     begin
-      asadmin_exec(["get #{@resource[:name]}"]).each do |line|
-        return true if "#{@resource[:name]}=#{@resource[:value]}" == line.chomp
+      asadmin_exec(["get #{@resource[:attribute]}"]).each do |line|
+        return true if "#{@resource[:attribute]}=#{@resource[:value]}" == line.chomp
       end
       return false
     rescue Exception => msg
